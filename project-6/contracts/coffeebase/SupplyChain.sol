@@ -83,8 +83,6 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole,
     _;
     uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
-    // consumerID not set
-    // items[_upc].consumerID.transfer(amountToReturn);
     msg.sender.transfer(amountToReturn);
   }
 
@@ -261,11 +259,9 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole,
 
   // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
   // Use the above modifiers to check if the item is shipped
-  function receiveItem(uint _upc) public
+  function receiveItem(uint _upc) public payable
     // Call modifier to check if upc has passed previous supply chain stage
     shipped(_upc)
-    // Access Control List enforced by calling Smart Contract / DApp
-    onlyRetailer
     {
     // Update the appropriate fields - ownerID, retailerID, itemState
       Item storage item = items[_upc];
@@ -281,8 +277,6 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole,
   function purchaseItem(uint _upc) public
     // Call modifier to check if upc has passed previous supply chain stage
     received(_upc)
-    // Access Control List enforced by calling Smart Contract / DApp
-    onlyConsumer
     {
     // Update the appropriate fields - ownerID, consumerID, itemState
       Item storage item = items[_upc];

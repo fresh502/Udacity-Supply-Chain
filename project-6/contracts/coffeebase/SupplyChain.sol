@@ -1,13 +1,9 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-import "../coffeeaccesscontrol/FarmerRole.sol";
-import "../coffeeaccesscontrol/DistributorRole.sol";
-import "../coffeeaccesscontrol/RetailerRole.sol";
-import "../coffeeaccesscontrol/ConsumerRole.sol";
 import "../coffeecore/Ownable.sol";
 
 // Define a contract 'Supplychain'
-contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole, Ownable {
+contract SupplyChain is Ownable {
 
   // Define a variable called 'upc' for Universal Product Code (UPC)
   uint  upc;

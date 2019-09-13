@@ -148,7 +148,6 @@ contract SupplyChain is Ownable {
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(
-    uint _upc,
     address payable _originFarmerID,
     string memory _originFarmName,
     string memory _originFarmInformation,
@@ -158,22 +157,23 @@ contract SupplyChain is Ownable {
     public
   {
     // Add the new item as part of Harvest
-    Item storage item = items[_upc];
+    Item storage item = items[upc];
+    item.upc = upc;
     item.sku = sku;
-    item.upc = _upc;
     item.ownerID = _originFarmerID;
     item.originFarmerID = _originFarmerID;
     item.originFarmName = _originFarmName;
     item.originFarmInformation = _originFarmInformation;
     item.originFarmLatitude = _originFarmLatitude;
     item.originFarmLongitude = _originFarmLongitude;
-    item.productID = _upc + sku;
+    item.productID = upc + sku;
     item.productNotes = _productNotes;
     item.itemState = defaultState;
-    // Increment sku
-    sku = sku + 1;
     // Emit the appropriate event
-    emit Harvested(_upc);
+    emit Harvested(upc);
+    // Increment upc, sku
+    upc++;
+    sku++;
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'

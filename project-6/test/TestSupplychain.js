@@ -49,8 +49,8 @@ contract('SupplyChain', function(accounts) {
         let eventEmitted = false
 
         // Mark an item as Harvested by calling function harvestItem()
-        const { logs: [{ args: { '0': upcFromEvent } }] } = await supplyChain.harvestItem(upc, originFarmerID, originFarmName, originFarmInformation, originFarmLatitude, originFarmLongitude, productNotes)
-        if (upcFromEvent && upcFromEvent.toNumber() === sku) eventEmitted = true
+        const { logs: [{ args: { '0': upcFromEvent } }] } = await supplyChain.harvestItem(originFarmerID, originFarmName, originFarmInformation, originFarmLatitude, originFarmLongitude, productNotes)
+        if (upcFromEvent && upcFromEvent.toNumber() === upc) eventEmitted = true
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)

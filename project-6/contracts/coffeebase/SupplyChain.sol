@@ -10,17 +10,17 @@ import "../coffeeaccesscontrol/ConsumerRole.sol";
 contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, ConsumerRole {
 
   // Define a variable called 'upc' for Universal Product Code (UPC)
-  uint  upc;
+  uint internal upc;
 
   // Define a variable called 'sku' for Stock Keeping Unit (SKU)
-  uint  sku;
+  uint internal sku;
 
   // Define a public mapping 'items' that maps the UPC to an Item.
-  mapping (uint => Item) items;
+  mapping (uint => Item) internal items;
 
   // Define a public mapping 'itemsHistory' that maps the UPC to an array of TxHash,
   // that track its journey through the supply chain -- to be sent from DApp.
-  mapping (uint => string[]) itemsHistory;
+  mapping (uint => string[]) internal itemsHistory;
 
   // Define enum 'State' with the following values:
   enum State
@@ -35,7 +35,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
     Purchased   // 7
   }
 
-  State constant defaultState = State.Harvested;
+  State internal constant defaultState = State.Harvested;
 
   // Define a struct 'Item' with the following fields:
   struct Item {

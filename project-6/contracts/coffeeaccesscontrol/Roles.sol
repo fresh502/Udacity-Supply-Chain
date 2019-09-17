@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity 0.5.8;
 
 /**
  * @title Roles
@@ -13,8 +13,8 @@ library Roles {
    * @dev give an account access to this role
    */
   function add(Role storage role, address account) internal {
-    require(account != address(0));
-    require(!has(role, account));
+    require(account != address(0), "Invalid address");
+    require(!has(role, account), "Already registerd role");
 
     role.bearer[account] = true;
   }
@@ -23,8 +23,8 @@ library Roles {
    * @dev remove an account's access to this role
    */
   function remove(Role storage role, address account) internal {
-    require(account != address(0));
-    require(has(role, account));
+    require(account != address(0), "Invalid address");
+    require(has(role, account), "Not registered role");
 
     role.bearer[account] = false;
   }
@@ -38,7 +38,7 @@ library Roles {
     view
     returns (bool)
   {
-    require(account != address(0));
+    require(account != address(0), "Invalid address");
     return role.bearer[account];
   }
 }

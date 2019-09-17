@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity 0.5.0;
 
 import "../coffeecore/Ownable.sol";
 import "../coffeeaccesscontrol/FarmerRole.sol";
@@ -144,10 +144,8 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
   }
 
   // Define a function 'kill' if required
-  function kill() public {
-    if (msg.sender == origOwner) {
-      selfdestruct(origOwner);
-    }
+  function kill() public onlyOwner {
+    selfdestruct(origOwner);
   }
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'

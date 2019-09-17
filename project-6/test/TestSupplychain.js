@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // This script is designed to test the solidity smart contract - SuppyChain.sol -- and the various functions within
 // Declare a variable and assign the compiled smart contract artifact
 var SupplyChain = artifacts.require('SupplyChain')
@@ -12,13 +13,12 @@ contract('SupplyChain', function(accounts) {
     const originFarmInformation = "Yarray Valley"
     const originFarmLatitude = "-38.239770"
     const originFarmLongitude = "144.341490"
-    var productID = sku + upc
+    const productID = sku + upc
     const productNotes = "Best beans for Espresso"
     const productPrice = web3.utils.toWei("1", "ether")
     const distributorID = accounts[2]
     const retailerID = accounts[3]
     const consumerID = accounts[4]
-    const emptyAddress = '0x00000000000000000000000000000000000000'
 
     ///Available Accounts
     ///==================
@@ -40,7 +40,19 @@ contract('SupplyChain', function(accounts) {
     console.log("Retailer: accounts[3] ", accounts[3])
     console.log("Consumer: accounts[4] ", accounts[4])
 
-    // 1st Test
+    it("Testing smart contract function addFarmerByOwner() that allows the contract owner to add farmer", async() => {
+        const supplyChain = await SupplyChain.deployed()
+
+        // Declare and Initialize a variable for event
+        let eventEmitted = false
+
+        // Mark an item as Harvested by calling function harvestItem()
+        const { logs: [{ args: { '0': addressFromEvent } }] } = await supplyChain.addFarmerByOwner(originFarmerID, { from: ownerID })
+        if (addressFromEvent && addressFromEvent == originFarmerID) eventEmitted = true
+
+        assert.equal(eventEmitted, true, 'Invalid event emitted')
+    })
+
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -48,7 +60,13 @@ contract('SupplyChain', function(accounts) {
         let eventEmitted = false
 
         // Mark an item as Harvested by calling function harvestItem()
-        const { logs: [{ args: { '0': upcFromEvent } }] } = await supplyChain.harvestItem(originFarmerID, originFarmName, originFarmInformation, originFarmLatitude, originFarmLongitude, productNotes)
+        const { logs: [{ args: { '0': upcFromEvent } }] } = await supplyChain.harvestItem(
+            originFarmName,
+            originFarmInformation,
+            originFarmLatitude,
+            originFarmLongitude,
+            productNotes,
+            { from: originFarmerID })
         if (upcFromEvent && upcFromEvent.toNumber() === upc) eventEmitted = true
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
@@ -68,7 +86,6 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
-    // 2nd Test
     it("Testing smart contract function processItem() that allows a farmer to process coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -98,7 +115,6 @@ contract('SupplyChain', function(accounts) {
         
     })    
 
-    // 3rd Test
     it("Testing smart contract function packItem() that allows a farmer to pack coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -127,7 +143,6 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
-    // 4th Test
     it("Testing smart contract function sellItem() that allows a farmer to sell coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -156,7 +171,19 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
-    // 5th Test
+    it("Testing smart contract function addDistributorByOwner() that allows the contract owner to add distributor", async() => {
+        const supplyChain = await SupplyChain.deployed()
+
+        // Declare and Initialize a variable for event
+        let eventEmitted = false
+
+        // Mark an item as Harvested by calling function harvestItem()
+        const { logs: [{ args: { '0': addressFromEvent } }] } = await supplyChain.addDistributorByOwner(distributorID, { from: ownerID })
+        if (addressFromEvent && addressFromEvent == distributorID) eventEmitted = true
+
+        assert.equal(eventEmitted, true, 'Invalid event emitted')
+    })
+    
     it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -187,7 +214,6 @@ contract('SupplyChain', function(accounts) {
         
     })    
 
-    // 6th Test
     it("Testing smart contract function shipItem() that allows a distributor to ship coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -217,7 +243,19 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
-    // 7th Test
+    it("Testing smart contract function addRetailerByOwner() that allows the contract owner to add reatailer", async() => {
+        const supplyChain = await SupplyChain.deployed()
+
+        // Declare and Initialize a variable for event
+        let eventEmitted = false
+
+        // Mark an item as Harvested by calling function harvestItem()
+        const { logs: [{ args: { '0': addressFromEvent } }] } = await supplyChain.addRetailerByOwner(retailerID, { from: ownerID })
+        if (addressFromEvent && addressFromEvent == retailerID) eventEmitted = true
+
+        assert.equal(eventEmitted, true, 'Invalid event emitted')
+    })
+
     it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -248,7 +286,19 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
-    // 8th Test
+    it("Testing smart contract function addConsumerByOwner() that allows the contract owner to add consumer", async() => {
+        const supplyChain = await SupplyChain.deployed()
+
+        // Declare and Initialize a variable for event
+        let eventEmitted = false
+
+        // Mark an item as Harvested by calling function harvestItem()
+        const { logs: [{ args: { '0': addressFromEvent } }] } = await supplyChain.addConsumerByOwner(consumerID, { from: ownerID })
+        if (addressFromEvent && addressFromEvent == consumerID) eventEmitted = true
+
+        assert.equal(eventEmitted, true, 'Invalid event emitted')
+    })
+
     it("Testing smart contract function purchaseItem() that allows a consumer to purchase coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
         
@@ -280,7 +330,6 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
-    // 9th Test
     it("Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain", async() => {
         const supplyChain = await SupplyChain.deployed()
 
@@ -298,7 +347,6 @@ contract('SupplyChain', function(accounts) {
         assert.equal(resultBufferOne[7], originFarmLongitude, 'Error: Missing or Invalid originFarmLongitude')
     })
 
-    // 10th Test
     it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
         const supplyChain = await SupplyChain.deployed()
 

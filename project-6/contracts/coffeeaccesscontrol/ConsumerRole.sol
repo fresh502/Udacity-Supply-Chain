@@ -1,10 +1,13 @@
 pragma solidity 0.5.8;
 
+// Import contract 'Ownable'
+import "../coffeecore/Ownable.sol";
+
 // Import the library 'Roles'
 import "./Roles.sol";
 
 // Define a contract 'ConsumerRole' to manage this role - add, remove, check
-contract ConsumerRole {
+contract ConsumerRole is Ownable {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
@@ -21,13 +24,18 @@ contract ConsumerRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyConsumer() {
-    require(isConsumer(msg.sender));
+    require(isConsumer(msg.sender), "Not consumer");
     _;
   }
 
   // Define a function 'isConsumer' to check this role
   function isConsumer(address account) public view returns (bool) {
     return consumers.has(account);
+  }
+
+  // Define a function 'addConsumerByOwner' that adds this role by the contract owner
+  function addConsumerByOwner(address account) public onlyOwner {
+    _addConsumer(account);
   }
 
   // Define a function 'addConsumer' that adds this role
@@ -43,10 +51,12 @@ contract ConsumerRole {
   // Define an internal function '_addConsumer' to add this role, called by 'addConsumer'
   function _addConsumer(address account) internal {
     consumers.add(account);
+    emit ConsumerAdded(account);
   }
 
   // Define an internal function '_removeConsumer' to remove this role, called by 'removeConsumer'
   function _removeConsumer(address account) internal {
     consumers.remove(account);
+    emit ConsumerRemoved(account);
   }
 }

@@ -150,20 +150,20 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(
-    address payable _originFarmerID,
     string memory _originFarmName,
     string memory _originFarmInformation,
     string memory _originFarmLatitude,
     string memory _originFarmLongitude,
     string memory _productNotes)
     public
+    onlyFarmer
   {
     // Add the new item as part of Harvest
     Item storage item = items[upc];
     item.upc = upc;
     item.sku = sku;
-    item.ownerID = _originFarmerID;
-    item.originFarmerID = _originFarmerID;
+    item.ownerID = msg.sender;
+    item.originFarmerID = msg.sender;
     item.originFarmName = _originFarmName;
     item.originFarmInformation = _originFarmInformation;
     item.originFarmLatitude = _originFarmLatitude;
@@ -180,6 +180,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
   function processItem(uint _upc) public
+    onlyFarmer
     // Call modifier to check if upc has passed previous supply chain stage
     harvested(_upc)
     // Call modifier to verify caller of this function
@@ -193,6 +194,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
   function packItem(uint _upc) public
+    onlyFarmer
     // Call modifier to check if upc has passed previous supply chain stage
     processed(_upc)
     // Call modifier to verify caller of this function
@@ -206,6 +208,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a function 'sellItem' that allows a farmer to mark an item 'ForSale'
   function sellItem(uint _upc, uint _price) public
+    onlyFarmer
     // Call modifier to check if upc has passed previous supply chain stage
     packed(_upc)
     // Call modifier to verify caller of this function
@@ -223,6 +226,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough,
   // and any excess ether sent is refunded back to the buyer
   function buyItem(uint _upc) public payable
+    onlyDistributor
     // Call modifier to check if upc has passed previous supply chain stage
     forSale(_upc)
     // Call modifer to check if buyer has paid enough
@@ -244,6 +248,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
   // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'
   // Use the above modifers to check if the item is sold
   function shipItem(uint _upc) public
+    onlyDistributor
     // Call modifier to check if upc has passed previous supply chain stage
     sold(_upc)
     // Call modifier to verify caller of this function
@@ -258,6 +263,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
   // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
   // Use the above modifiers to check if the item is shipped
   function receiveItem(uint _upc) public payable
+    onlyRetailer
     // Call modifier to check if upc has passed previous supply chain stage
     shipped(_upc)
     {
@@ -273,6 +279,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
   function purchaseItem(uint _upc) public
+    onlyConsumer
     // Call modifier to check if upc has passed previous supply chain stage
     received(_upc)
     {

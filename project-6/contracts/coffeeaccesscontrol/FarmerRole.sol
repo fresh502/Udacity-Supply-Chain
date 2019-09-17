@@ -1,10 +1,13 @@
 pragma solidity 0.5.8;
 
+// Import contract 'Ownable'
+import "../coffeecore/Ownable.sol";
+
 // Import the library 'Roles'
 import "./Roles.sol";
 
 // Define a contract 'FarmerRole' to manage this role - add, remove, check
-contract FarmerRole {
+contract FarmerRole is Ownable {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
@@ -21,13 +24,18 @@ contract FarmerRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyFarmer() {
-    require(isFarmer(msg.sender), "check farmer");
+    require(isFarmer(msg.sender), "Not farmer");
     _;
   }
 
   // Define a function 'isFarmer' to check this role
   function isFarmer(address account) public view returns (bool) {
     return farmers.has(account);
+  }
+
+  // Define a function 'addFarmerByOwner' that adds this role by the contract owner
+  function addFarmerByOwner(address account) public onlyOwner {
+    _addFarmer(account);
   }
 
   // Define a function 'addFarmer' that adds this role

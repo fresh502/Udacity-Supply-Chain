@@ -1,10 +1,13 @@
 pragma solidity 0.5.8;
 
+// Import contract 'Ownable'
+import "../coffeecore/Ownable.sol";
+
 // Import the library 'Roles'
 import "./Roles.sol";
 
 // Define a contract 'DistributorRole' to manage this role - add, remove, check
-contract DistributorRole {
+contract DistributorRole is Ownable {
   using Roles for Roles.Role;
 
   // Define 2 events, one for Adding, and other for Removing
@@ -21,13 +24,18 @@ contract DistributorRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyDistributor() {
-    require(isDistributor(msg.sender), "check Distributor");
+    require(isDistributor(msg.sender), "Not distributor");
     _;
   }
 
   // Define a function 'isDistributor' to check this role
   function isDistributor(address account) public view returns (bool) {
     return distributors.has(account);
+  }
+
+  // Define a function 'addDistributorByOwner' that adds this role by the contract owner
+  function addDistributorByOwner(address account) public onlyOwner {
+    _addDistributor(account);
   }
 
   // Define a function 'addDistributor' that adds this role

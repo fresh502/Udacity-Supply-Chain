@@ -55,6 +55,9 @@
             <br>
             <input type="text" id="originFarmLongitude" name="originFarmLongitude"><br>
             <br>
+            Product Notes
+            <br>
+            <input type="text" id="productNotes" name="productNotes" size="60"><br>
             <button class="btn-harvest" id="button" type="button" data-id="1">Harvest</button>
             <button class="btn-process" id="button" type="button" data-id="2">Process</button>
             <button class="btn-pack" id="button" type="button" data-id="3">Pack</button>
@@ -63,9 +66,6 @@
         <div class=form-break></div>
         <h2>Product Details</h2>
         <div class="form-group">
-            Product Notes
-            <br>
-            <input type="text" id="productNotes" name="productNotes" size="60"><br>
             Product Price
             <br>
             <input type="number" id="productPrice" name="productPrice">ETH<br>
@@ -84,6 +84,19 @@
             <button class="btn-ship" id="button" type="button" data-id="6">Ship</button>
             <button class="btn-receive" id="button" type="button" data-id="7">Receive</button>
             <button class="btn-purchase" id="button" type="button" data-id="8">Purchase</button>
+        </div>
+        <div class=form-break></div>
+        <h2>Add Farmer, Distributor, Retailer, Consumer (Only by the contract owner)</h2>
+        <div class="form-group">
+            Address
+            <br>
+            <input type="text" id="addressToAdd" name="addressToAdd" size="50"><br>
+            <div class=button-div>
+                <button class="btn-addFarmer" id="button" type="button" data-id="11">Add Farmer</button>
+                <button class="btn-addDistributor" id="button" type="button" data-id="12">Add Distributor</button>
+                <button class="btn-addRetailer" id="button" type="button" data-id="13">Add Retailer</button>
+                <button class="btn-addConsumer" id="button" type="button" data-id="14">Add Consumer</button>
+            </div>
         </div>
         <div class=form-break></div>
         <hr>

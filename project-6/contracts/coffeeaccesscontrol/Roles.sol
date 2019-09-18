@@ -39,6 +39,7 @@ library Roles {
     returns (bool)
   {
     require(account != address(0), "Invalid address");
-    return role.bearer[account];
+    bool ret = role.bearer[account];
+    return ret;
   }
 }

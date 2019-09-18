@@ -16,6 +16,7 @@ App = {
     distributorID: "0x0000000000000000000000000000000000000000",
     retailerID: "0x0000000000000000000000000000000000000000",
     consumerID: "0x0000000000000000000000000000000000000000",
+    addressToAdd: "0x0000000000000000000000000000000000000000",
 
     state: {
         0: 'Harvested',
@@ -166,6 +167,18 @@ App = {
             case 10:
                 return await App.fetchItemBufferTwo(event);
                 break;
+            case 11:
+                return await App.addFarmerByOwner(event);
+                break;
+            case 12:
+                return await App.addDistributorByOwner(event);
+                break;
+            case 13:
+                return await App.addRetailerByOwner(event);
+                break;
+            case 14:
+                return await App.addConsumerByOwner(event);
+                break;
             }
     },
 
@@ -177,7 +190,6 @@ App = {
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.harvestItem(
-                App.originFarmerID,
                 App.originFarmName, 
                 App.originFarmInformation, 
                 App.originFarmLatitude, 
@@ -311,7 +323,6 @@ App = {
           return instance.fetchItemBufferOne(App.upc);
         }).then(function(result) {
           $('#sku').val(result[0]);
-          $('#upc').val(result[1]);
           $('#ownerID').val(result[2]);
           $('#originFarmerID').val(result[3]);
           $('#originFarmName').val(result[4]);
@@ -350,6 +361,66 @@ App = {
           console.log('fetchItemBufferTwo', result);;
         }).catch(function(err) {
           console.log(err.message);
+        });
+    },
+
+    addFarmerByOwner: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.addressToAdd = $('#addressToAdd').val();
+
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.addFarmerByOwner(App.addressToAdd, { from: App.metamaskAccountID });
+        }).then(function(result) {
+            console.log('processItem',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    addDistirubutorByOwner: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.addressToAdd = $('#addressToAdd').val();
+
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.addDistributorByOwner(App.addressToAdd, { from: App.metamaskAccountID });
+        }).then(function(result) {
+            console.log('processItem',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    addRetailerByOwner: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.addressToAdd = $('#addressToAdd').val();
+
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.addRetailerByOwner(App.addressToAdd, { from: App.metamaskAccountID });
+        }).then(function(result) {
+            console.log('processItem',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    addConsumerByOwner: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.addressToAdd = $('#addressToAdd').val();
+
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.addConsumerByOwner(App.addressToAdd, { from: App.metamaskAccountID });
+        }).then(function(result) {
+            console.log('processItem',result);
+        }).catch(function(err) {
+            console.log(err.message);
         });
     },
 

@@ -68,7 +68,7 @@ contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, Cons
 
   // Define a modifer that verifies the Caller
   modifier verifyCaller (address _address) {
-    require(msg.sender == _address, "check caller and address");
+    require(msg.sender == _address, "Invalid caller");
     _;
   }
 
